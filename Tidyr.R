@@ -1,6 +1,7 @@
 library(tidyr)
 library(ggplot2)
 library(stringr)
+library(dplyr)
 
 data <- who
 
@@ -67,11 +68,27 @@ new_table5<- table5 %>%
   unite(col = "united_year", century:year, sep = "")
 
 
+# Create a bar chart that shows the numer of tb cases among each gender in "Cameroon" in 1995.
+# the last few observation has newrel_f014 instead of new_rel, we need to replace them and then separate.
+# variables (New, Diagnosis, SexAge)
+Cameroon <- data %>%
+  gather(new_sp_m014:newrel_f65, key = "code", value = "Cases") %>%
+  filter(country == "Cameroon", year == 1995 )
+
+Cameroon$code <- str_replace(string = Cameroon$code, pattern = "newrel", replacement = "new_rel")
+Cameroon <- Cameroon %>%
+  separate(col =code, into = c("New","Diagnosis", "SexAge"), sep = "_", remove = F) %>%
+  separate(col = SexAge, into= c("Gender","AgeGroup"), sep = 1 )
+
+ggplot(Cameroon, aes(x=Gender, y= Cases)) +
+  geom_col(position = position_dodge())
+  
 
 
-
-
-
+  
+  
+  
+  
 
 
 
