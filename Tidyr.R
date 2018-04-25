@@ -56,11 +56,15 @@ table4a %>%
 
 
 g_table3 <- table3 %>%
-  separate(col = rate, into = c("Cases", "Population"), sep = "/", remove = F)
+  separate(col = rate, into = c("Cases", "Population"), sep = "/", remove = F, convert = T)
 
+#separate the year into century and year
 
+table5 <- table3 %>%
+  separate(col = year, into = c("century","year"), sep = 2)
 
-
+new_table5<- table5 %>%
+  unite(col = "united_year", century:year, sep = "")
 
 
 
